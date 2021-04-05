@@ -13,7 +13,7 @@ def get_prices(symbol):
         low = str(todays_data['Low'][0])
         close = str(todays_data['Close'][0])
 
-    except IndexError:
+    except IndexError: #If there is an index error then the chances are that the symbol has been delisted for whatever reason. 
         high = 'n/a'
         low = 'n/a'
         close = 'n/a'
@@ -31,12 +31,8 @@ def store_prices():
     with open('Stocks_List.txt', mode='r') as f:
         with open('Stock_Prices.txt', mode='w') as w:
             for ticker in f:
-                temp = (str(ticker.strip())+ ': '+ str(get_prices(str(ticker.strip()))))
+                temp = {ticker.strip(): get_prices(str(ticker.strip()))}
                 w.write(str(temp))
                 w.write('\n')
-'''        for ticker in f:
-            tickers.append(str(ticker.strip()))
-    for i in range(len(tickers)):
-        print(tickers[i], ': ', get_prices(tickers[i]))'''
 
 store_prices()
