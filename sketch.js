@@ -1,6 +1,8 @@
+/* jshint esversion:6 */
+
 function setup() {
   createCanvas(400, 400);
-  readTextFile("file://Stock_Prices.txt");
+  readTextFile("http://127.0.0.1:5500/Stock_Prices.txt");
 }
 
 function draw() {
@@ -16,18 +18,7 @@ function draw() {
 }
 
 function readTextFile(file) {
-  var rawFile = new XMLHttpRequest();
-  rawFile.open("GET", file, false);
-  rawFile.onreadystatechange = function() 
-  {
-    if(rawFile.readyState === 4)
-    {
-      if(rawFile.readyState === 200 || rawFile.status == 0)
-      {
-        var allText = rawFile.responseText;
-        alert(allText);
-      }
-    }
-  };
-  rawFile.send(null);
+  fetch(file)
+    .then(response => response.text())
+    .then(jsonResponse => console.log(jsonResponse));
 }
