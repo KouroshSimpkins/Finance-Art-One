@@ -2,6 +2,7 @@
 
 function setup() {
   createCanvas(400, 400);
+  colorMode(HSB);
   readTextFile("http://127.0.0.1:5500/Stock_Prices.txt");
 }
 
