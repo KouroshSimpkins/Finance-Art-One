@@ -13,7 +13,7 @@ def get_prices(symbol):
         high = str(todays_data['High'][0])
         low = str(todays_data['Low'][0])
         close = str(todays_data['Close'][0])
-# who wrote this garbage pile of data tunneling?! Oh I did...
+
     except IndexError: #If there is an index error then the chances are that the symbol has been delisted for whatever reason. 
         delisted = True
         return delisted
@@ -37,4 +37,15 @@ def store_prices():
                 w.write(str(temp))
                 w.write('\n')
 
-store_prices()
+def delisted_tickers():
+    with open('Stocks_List.txt', mode='r+') as f:
+        with open('Delisted_Stocks.txt', mode='w') as w:
+            for ticker in f:
+                temp = {ticker.strip(): get_prices(str(ticker.strip()))}
+                if temp:
+                    w.write(str(temp))
+                    w.write('\n')
+                else:
+                    pass
+
+delisted_tickers()
