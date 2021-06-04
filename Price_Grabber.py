@@ -1,6 +1,7 @@
 """Uses yfinance to grab the lowest, close and highest price of a given ticker for a certain length of time"""
 
 import yfinance as yf
+import csv
 
 tickers = []
 
@@ -26,10 +27,13 @@ def get_prices(symbol):
     finally:
         if delisted:
             return delisted
-        three_vals = {'high':high, 'low':low , 'close':close}
-        return three_vals
+        # three_vals = {'high':high, 'low':low , 'close':close}
+        return high,low,close
+
+
 
 def store_prices():
+    """deprecated, use store_prices_csv"""
     with open('Stocks_List.txt', mode='r+') as f:
         with open('Stock_Prices.txt', mode='w') as w:
             for ticker in f:
@@ -38,6 +42,7 @@ def store_prices():
                 w.write('\n')
 
 def delisted_tickers():
+    #TODO #3
     with open('Stocks_List.txt', mode='r+') as f:
         with open('Delisted_Stocks.txt', mode='w') as w:
             for ticker in f:
@@ -48,4 +53,14 @@ def delisted_tickers():
                 else:
                     pass
 
-delisted_tickers()
+def store_prices_csv():
+    with open('Stocks_List.txt', mode='r+') as f:
+        with open('Stock_Prices.csv', mode='w', newline='') as w:
+            writer = csv.writer(w)
+            writer.writerow(["SN", "Ticker", "High", "Low", "Close"])
+            i = 0
+            for ticker in f:
+                writer.writerow([i, str(ticker.strip()), get_prices(ticker.strip())])
+                i += 1
+
+store_prices_csv()
