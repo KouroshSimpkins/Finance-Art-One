@@ -60,7 +60,11 @@ def store_prices_csv():
             writer.writerow(["SN", "Ticker", "High", "Low", "Close"])
             i = 0
             for ticker in f:
-                writer.writerow([i, str(ticker.strip()), get_prices(ticker.strip())])
-                i += 1
+                try:
+                    High, Low, Close = get_prices(str(ticker.strip()))
+                    writer.writerow([i, str(ticker.strip()), High, Low, Close])
+                    i += 1
+                except TypeError:
+                    pass
 
 store_prices_csv()
