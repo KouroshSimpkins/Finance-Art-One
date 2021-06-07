@@ -8,12 +8,19 @@ tickers = []
 def get_prices(symbol):
     ticker = yf.Ticker(symbol)
     delisted = False
+    isup = False
 
     try:
         todays_data = ticker.history(period='1d')
         high = str(todays_data['High'][0])
         low = str(todays_data['Low'][0])
         close = str(todays_data['Close'][0])
+        Open = str(todays_data['Open'][0])
+        if close > Open:
+            isup = True
+        elif close < Open:
+            isup = False
+        
 
     except IndexError: #If there is an index error then the chances are that the symbol has been delisted for whatever reason. 
         delisted = True
@@ -23,12 +30,15 @@ def get_prices(symbol):
         high = 'n/a'
         low = 'n/a'
         close = 'n/a'
+        Open = 'n/a'
 
     finally:
         if delisted:
             return delisted
         # three_vals = {'high':high, 'low':low , 'close':close}
-        return high,low,close
+        # three_vals is ignored now because we can return the data directly as a tuple
+        # keeping it here for the moment but don't really need it.
+        return Open,high,low,close,isup
 
 
 
@@ -57,12 +67,12 @@ def store_prices_csv():
     with open('Stocks_List.txt', mode='r+') as f:
         with open('Stock_Prices.csv', mode='w', newline='') as w:
             writer = csv.writer(w)
-            writer.writerow(["SN", "Ticker", "High", "Low", "Close"])
+            writer.writerow(["SN", "Ticker", "Open", "High", "Low", "Close", "isup"])
             i = 0
             for ticker in f:
                 try:
-                    High, Low, Close = get_prices(str(ticker.strip()))
-                    writer.writerow([i, str(ticker.strip()), High, Low, Close])
+                    Open, High, Low, Close, isup = get_prices(str(ticker.strip()))
+                    writer.writerow([i, str(ticker.strip()), Open, High, Low, Close, isup])
                     i += 1
                 except TypeError:
                     pass
