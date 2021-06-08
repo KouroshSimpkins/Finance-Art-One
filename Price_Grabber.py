@@ -72,8 +72,12 @@ def store_prices_csv():
             for ticker in f:
                 try:
                     Open, High, Low, Close, isup = get_prices(str(ticker.strip()))
-                    writer.writerow([i, str(ticker.strip()), Open, High, Low, Close, isup])
-                    i += 1
+                    if Open != 'n/a':
+                        writer.writerow([i, str(ticker.strip()), Open, High, Low, Close, isup])
+                        i += 1
+                    elif Open == 'n/a':
+                        print(ticker.strip(), "has no data to write")
+                        pass
                 except TypeError:
                     pass
 

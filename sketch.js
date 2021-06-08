@@ -5,6 +5,7 @@ function preload() {
 }
 
 function setup() {
+  size = (round(sqrt(Prices.getRowCount()))+1);
   createCanvas(1000, 1000);
   frameRate(1);
   colorMode(HSB);
@@ -20,19 +21,23 @@ function draw() {
   pointDraw(0,0);
 }
 
-function readTextFile(file) {
-  fetch(file)
-    .then(response => response.text())
-    .then(data => {
-      console.log(data);
-    });
-}
-
 // pointDraw function will draw the pixels one by one for the output.
 function pointDraw(StartX, StartY) {
+  let SN = 0;
+  let Hue = 235;
   for (let x = StartX; x <= width; x++) {
     for (let y = StartY; y <= height; y++) {
-      stroke(120, 100, random(25,100));
+      let isup = Prices.getString(SN, "isup");
+      if (isup == "True") {
+        Hue = 120;
+      } else {
+        Hue = 10;
+      }
+
+      let Bright = map(Prices.getNumber(SN, "Close"), Prices.getNumber(SN, "High"), Prices.getNumber(SN, "Low"), 15, 100);
+
+      SN += 1;
+      stroke(Hue, 100, Bright);
       point(x, y);
     }
   }
