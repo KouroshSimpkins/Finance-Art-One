@@ -6,13 +6,13 @@ function preload() {
 
 function setup() {
   size = (round(sqrt(Prices.getRowCount()))+1);
-  createCanvas(1000, 1000);
-  frameRate(1);
+  createCanvas(size, size);
+  frameRate(0.1);
   colorMode(HSB);
-  // Hue should be either 120 (green) or 0-10 (red)
+  noLoop();
+  // Hue should be either 120 (green) or 10 (red)
   // Brightness shouldn't go lower than 15? This will keep the colours consistent.
   // Saturation stays at the highest value (100?)
-  /*readTextFile("http://127.0.0.1:5500/Stock_Prices.txt");*/
 }
 
 function draw() {
@@ -33,8 +33,8 @@ function pointDraw(StartX, StartY) {
       } else {
         Hue = 10;
       }
-
-      let Bright = map(Prices.getNumber(SN, "Close"), Prices.getNumber(SN, "High"), Prices.getNumber(SN, "Low"), 15, 100);
+      
+      let Bright = map(Prices.getNum(SN, "Close"), Prices.getNum(SN, "High"), Prices.getNum(SN, "Low"), 15, 100);
 
       SN += 1;
       stroke(Hue, 100, Bright);
